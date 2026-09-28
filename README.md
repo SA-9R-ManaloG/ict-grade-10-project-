@@ -2,175 +2,490 @@
 <html>
 <head>
     <title>1st Quarter Project | Toy Store</title>
-    <!-- These lines load PyScript so Python can run directly in the browser -->
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-    
     <style>
-        /* Simple CSS to make it look neat but like a student project */
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-        header { background: #333; color: white; padding: 15px; text-align: center; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; }
-        
-        .container { max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 5px; border: 1px solid #ddd; }
-        .section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
-        
-        input, select, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-        button { background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; }
-        button:hover { background-color: #218838; }
-        
-        .toy-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; align-items: center; }
-        .toy-row input { width: auto; margin-right: 10px; }
-        
-        .footer { text-align: center; margin-top: 20px; color: #777; font-size: 12px; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ffc0cb 0%, #ffc0cb 20%, #ffffff 20%, #ffffff 80%, #87ceeb 80%, #87ceeb 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4a4a4a;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 5px 12px;
+            background-color: #666;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        nav a:hover {
+            background-color: #888;
+        }
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .left-side, .right-side {
+            width: 25%;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .middle-section {
+            width: 45%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        .girls-title {
+            color: #ff69b4;
+        }
+        .boys-title {
+            color: #4169e1;
+        }
+        .toy-item {
+            padding: 10px;
+            margin: 8px 0;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .toy-item:hover {
+            background-color: #fffacd;
+        }
+        .toy-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+            float: right;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .sku-result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            border-radius: 4px;
+        }
+        .sku-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+        .cart {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .cart-item {
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .total {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .receipt-section {
+            display: none;
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .total-row {
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #4CAF50;
+            color: white;
+        }
+        .receipt-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-print {
+            background-color: #2196F3;
+        }
+        .page-section {
+            display: none;
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .page-section h1 {
+            color: #333;
+        }
+        .page-section p {
+            line-height: 1.6;
+            color: #555;
+        }
+        .highlight {
+            background-color: #fffacd;
+            padding: 10px;
+            border-left: 4px solid #ffeb3b;
+            margin: 20px 0;
+        }
+        .contact-info {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-
     <header>
-        <h2>1st Quarter Project | Toy Store</h2>
+        <h1>🧸 TOY STORE</h1>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">SKU Generator</a>
-            <a href="#">Receipt Generator</a>
+            <a onclick="showSection('store')">Home & SKU</a>
+            <a onclick="showSection('about')">About Us</a>
+            <a onclick="showSection('contact')">Contact</a>
         </nav>
     </header>
 
-    <div class="container">
-        
-        <!-- SKU GENERATOR SECTION -->
-        <div class="section">
-            <h3>SKU Generator</h3>
-            <label>Category:</label>
-            <select id="category">
-                <option value="GIRLS">Girls Toys</option>
-                <option value="BOYS">Boys Toys</option>
-                <option value="GAMES">Board Games</option>
-            </select>
-            
-            <label>Product Name:</label>
-            <input type="text" id="product_name" placeholder="e.g. Teddy">
-            
-            <label>Stock Quantity:</label>
-            <input type="number" id="quantity" placeholder="e.g. 50">
-            
-            <!-- This button runs the Python function make_sku -->
-            <button py-click="make_sku">Generate SKU</button>
-            
-            <div id="sku_box" style="margin-top: 15px; color: gray; text-align: center;">
-                Your generated SKU will appear here.
+    <div id="storeSection" class="main-container">
+        <div class="left-side">
+            <h2 class="girls-title">🌸 Girls Section</h2>
+            <div class="toy-item" onclick="addItem('Flower Set', 'GIRLS-FLW', 25, 15.99)">
+                <span class="toy-icon">💐</span> Flower Set <span class="price">₱15.99</span>
+            </div>
+            <div class="toy-item" onclick="addItem('Princess Doll', 'GIRLS-DOL', 30, 24.99)">
+                <span class="toy-icon">👸</span> Princess Doll <span class="price">₱24.99</span>
+            </div>
+            <div class="toy-item" onclick="addItem('Teddy Bear', 'GIRLS-BEA', 40, 19.99)">
+                <span class="toy-icon">🧸</span> Teddy Bear <span class="price">19.99</span>
+            </div>
+            <div class="toy-item" onclick="addItem('Doll House', 'GIRLS-HOU', 15, 49.99)">
+                <span class="toy-icon"></span> Doll House <span class="price">₱49.99</span>
             </div>
         </div>
 
-        <!-- RECEIPT / MENU SECTION -->
-        <div class="section" style="border-bottom: none;">
-            <h3>Toy Store Menu</h3>
-            <p>Select the toys you want to buy:</p>
-            
-            <!-- Checkboxes for the toys. The value is the price in Peso -->
-            <div class="toy-row">
-                <label><input type="checkbox" id="item1" value="199"> Teddy Bear</label>
-                <span>₱199</span>
+        <div class="middle-section">
+            <h2> Order Menu & SKU Generator</h2>
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="category">
+                    <option value="GIRLS">Girls Section</option>
+                    <option value="BOYS">Boys Section</option>
+                </select>
             </div>
-            <div class="toy-row">
-                <label><input type="checkbox" id="item2" value="299"> Robot Transformer</label>
-                <span>₱299</span>
+            <div class="form-group">
+                <label>Product Name:</label>
+                <input type="text" id="prodName" placeholder="e.g. Robot Toy">
             </div>
-            <div class="toy-row">
-                <label><input type="checkbox" id="item3" value="150"> Race Car</label>
-                <span>₱150</span>
+            <div class="form-group">
+                <label>Stock Quantity:</label>
+                <input type="number" id="stockQty" placeholder="e.g. 50">
             </div>
-            <div class="toy-row">
-                <label><input type="checkbox" id="item4" value="450"> Doll House</label>
-                <span>₱450</span>
-            </div>
-            <div class="toy-row">
-                <label><input type="checkbox" id="item5" value="250"> Building Blocks</label>
-                <span>₱250</span>
+            <button onclick="generateSKU()">Generate SKU</button>
+
+            <div id="skuDisplay" class="sku-result">
+                <strong>Generated SKU:</strong>
+                <div id="skuCode" class="sku-code"></div>
+                <div id="skuInfo"></div>
             </div>
 
-            <br>
-            <!-- This button runs the Python function make_receipt -->
-            <button py-click="make_receipt">Create Order & Receipt</button>
-            
-            <div id="receipt_area" style="margin-top: 20px; border: 1px dashed #ccc; padding: 15px; color: gray; text-align: center;">
-                Your order summary will appear here.<br>Select your items and click "Create Order"
+            <h3 style="margin-top: 30px;">🛒 Current Order:</h3>
+            <div id="cart" class="cart">
+                <p style="text-align: center; color: #999;">No items yet. Click toys to add!</p>
             </div>
+            <div id="totalDiv" class="total" style="display: none;">Total: ₱0.00</div>
+            <button onclick="showReceipt()" style="margin-top: 15px; background-color: #ff9800;">Generate Receipt →</button>
         </div>
 
+        <div class="right-side">
+            <h2 class="boys-title">🚗 Boys Section</h2>
+            <div class="toy-item" onclick="addItem('Race Car', 'BOYS-CAR', 35, 29.99)">
+                <span class="toy-icon">🏎️</span> Race Car <span class="price">₱29.99</span>
+            </div>
+            <div class="toy-item" onclick="addItem('Robot', 'BOYS-ROB', 20, 39.99)">
+                <span class="toy-icon">🤖</span> Robot Transformer <span class="price">₱39.99</span>
+            </div>
+            <div class="toy-item" onclick="addItem('Building Blocks', 'BOYS-BLK', 50, 34.99)">
+                <span class="toy-icon">🧱</span> Building Blocks <span class="price">₱34.99</span>
+            </div>
+            <div class="toy-item" onclick="addItem('RC Car', 'BOYS-RCC', 25, 44.99)">
+                <span class="toy-icon">🚙</span> Remote Control Car <span class="price">₱44.99</span>
+            </div>
+        </div>
     </div>
 
-    <div class="footer">
-        SKU & Receipt Generator - 1st Quarter Project
+    <div id="aboutSection" class="page-section">
+        <h1>About Our Toy Store</h1>
+        <p>Welcome to the best toy store in town! We have been selling toys for kids of all ages since 2020.</p>
+        <div class="highlight">
+            <h3>Why Choose Us?</h3>
+            <ul>
+                <li>High quality and safe toys</li>
+                <li>Affordable prices in Philippine Peso (₱)</li>
+                <li>Separate sections for Boys and Girls</li>
+                <li>Fast and friendly service</li>
+            </ul>
+        </div>
+        <h3>Our Mission</h3>
+        <p>To bring joy, creativity, and fun to every household.</p>
     </div>
 
-    <!-- INLINE PYTHON CODE -->
-    <py-script>
-        # 1st Quarter Project - Toy Store
-        # This script handles the SKU generation and Receipt calculation using PyScript
+    <div id="contactSection" class="page-section">
+        <h1>Contact Us</h1>
+        <div class="contact-info">
+            <p>📍 123 Main Street, Toy City, Philippines</p>
+            <p>📞 (02) 8123-4567</p>
+            <p>✉️ info@toystore.ph</p>
+        </div>
+        <div class="form-group">
+            <label>Your Name:</label>
+            <input type="text" placeholder="Juan Dela Cruz">
+        </div>
+        <div class="form-group">
+            <label>Email Address:</label>
+            <input type="email" placeholder="juan@email.com">
+        </div>
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: Arial;" rows="5" placeholder="How can we help you?"></textarea>
+        </div>
+        <button onclick="alert('Thank you! We will get back to you soon.');">Send Message</button>
+    </div>
 
-        from pyscript import document
+    <div id="receiptSection" class="receipt-section">
+        <div class="receipt-header">
+            <h2>🧸 TOY STORE 🤖</h2>
+            <p>Official Receipt</p>
+            <p>123 Main Street, Toy City, Philippines</p>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <p><strong>Receipt #:</strong> <span id="receiptNum"></span></p>
+            <p><strong>Date:</strong> <span id="receiptDate"></span></p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>SKU</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="itemsList"></tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="2">TOTAL</td>
+                    <td id="totalAmt">₱0.00</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="receipt-footer">
+            <p>Thank you for shopping!</p>
+            <p>Please come again! 💖</p>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="backToStore()" class="btn">← Back to Store</button>
+            <button onclick="window.print()" class="btn btn-print">Print Receipt</button>
+        </div>
+    </div>
 
-        # Function to generate the unique SKU code
-        def make_sku(event):
-            # Clear the previous result first
-            document.getElementById('sku_box').innerHTML = ""
+    <script>
+        var cart = [];
+        var totalAmount = 0;
+
+        function showSection(sectionName) {
+            document.getElementById('storeSection').style.display = 'none';
+            document.getElementById('aboutSection').style.display = 'none';
+            document.getElementById('contactSection').style.display = 'none';
+            document.getElementById('receiptSection').style.display = 'none';
             
-            # Get the values from the HTML inputs
-            cat = document.getElementById('category').value
-            p_name = document.getElementById('product_name').value
-            qty = document.getElementById('quantity').value
-            
-            # Check if the user actually typed something
-            if p_name == "" or qty == "":
-                document.getElementById('sku_box').innerHTML = "<span style='color:red;'>Please fill in all fields!</span>"
-                return
+            if (sectionName == 'store') {
+                document.getElementById('storeSection').style.display = 'flex';
+            } else if (sectionName == 'about') {
+                document.getElementById('aboutSection').style.display = 'block';
+            } else if (sectionName == 'contact') {
+                document.getElementById('contactSection').style.display = 'block';
+            }
+            window.scrollTo(0, 0);
+        }
 
-            # Create the code: First 3 letters of category + first 3 letters of name + quantity
-            final_sku = cat[:3].upper() + "-" + p_name[:3].upper() + "-" + str(qty)
+        function generateSKU() {
+            var category = document.getElementById('category').value;
+            var productName = document.getElementById('prodName').value;
+            var stockQty = document.getElementById('stockQty').value;
             
-            # Display the result on the webpage
-            document.getElementById('sku_box').innerHTML = f"<h3 style='color:blue;'>Generated SKU: {final_sku}</h3>"
-
-
-        # Function to calculate the total and make the receipt
-        def make_receipt(event):
-            # Get the toy elements from the HTML by their IDs
-            toy1 = document.getElementById("item1")
-            toy2 = document.getElementById("item2")
-            toy3 = document.getElementById("item3")
-            toy4 = document.getElementById("item4")
-            toy5 = document.getElementById("item5")
+            if (productName == '' || stockQty == '') {
+                alert('Please fill in all fields!');
+                return;
+            }
             
-            # Calculate subtotal
-            # In Python, True is 1 and False is 0, so multiplying by .checked works perfectly
-            subtotal = (float(toy1.value) * toy1.checked + 
-                        float(toy2.value) * toy2.checked + 
-                        float(toy3.value) * toy3.checked + 
-                        float(toy4.value) * toy4.checked + 
-                        float(toy5.value) * toy5.checked)
-                        
-            # Calculate 12% Tax
-            tax_rate = 0.12 
-            tax = subtotal * tax_rate
-            total_price = subtotal + tax
+            var categoryCode = category.substring(0, 3);
+            var productCode = productName.replace(/\s/g, '').substring(0, 3).toUpperCase();
+            var sku = categoryCode + '-' + productCode + '-' + stockQty;
             
-            # Check if they bought anything
-            if subtotal == 0:
-                document.getElementById("receipt_area").innerHTML = "<span style='color:red;'>Please select at least one toy!</span>"
-                return
+            document.getElementById('skuCode').innerHTML = sku;
+            document.getElementById('skuInfo').innerHTML = 'Category: ' + category + '<br>Product: ' + productName + '<br>Stock: ' + stockQty;
+            document.getElementById('skuDisplay').style.display = 'block';
+        }
 
-            # Create the HTML for the receipt
-            receipt_html = f"""
-                <h3 style='text-align:center;'>--- Official Receipt ---</h3>
-                <p>Subtotal: {subtotal:.2f}</p>
-                <p>Tax (12%): ₱{tax:.2f}</p>
-                <h3 style='color:green; text-align:center;'>Total: {total_price:.2f}</h3>
-            """
+        function addItem(name, code, stock, price) {
+            var item = { name: name, code: code, stock: stock, price: price };
+            cart.push(item);
+            totalAmount += price;
+            updateCart();
+            var sku = code + '-' + stock;
+            alert('Added to cart!\n\nItem: ' + name + '\nSKU: ' + sku + '\nPrice: ₱' + price);
+        }
+
+        function updateCart() {
+            var cartDiv = document.getElementById('cart');
+            var totalDiv = document.getElementById('totalDiv');
             
-            # Put the receipt into the div on the webpage
-            document.getElementById("receipt_area").innerHTML = receipt_html
-    </py-script>
+            if (cart.length == 0) {
+                cartDiv.innerHTML = '<p style="text-align: center; color: #999;">No items yet. Click toys to add!</p>';
+                totalDiv.style.display = 'none';
+                return;
+            }
+            
+            var html = '';
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                html += '<div class="cart-item"><span>' + item.name + '</span><span>₱' + item.price.toFixed(2) + '</span></div>';
+            }
+            
+            cartDiv.innerHTML = html;
+            totalDiv.innerHTML = 'Total: ' + totalAmount.toFixed(2);
+            totalDiv.style.display = 'block';
+        }
 
+        function showReceipt() {
+            if (cart.length == 0) {
+                alert('Please add items to your cart first!');
+                return;
+            }
+            
+            document.getElementById('storeSection').style.display = 'none';
+            document.getElementById('receiptSection').style.display = 'block';
+            
+            var receiptNum = 'RCT-' + Date.now().toString().slice(-8);
+            document.getElementById('receiptNum').textContent = receiptNum;
+            
+            var now = new Date();
+            document.getElementById('receiptDate').textContent = now.toLocaleString();
+            
+            var tbody = document.getElementById('itemsList');
+            tbody.innerHTML = '';
+            
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                var sku = item.code + '-' + item.stock;
+                tbody.innerHTML += '<tr><td>' + item.name + '</td><td>' + sku + '</td><td>₱' + item.price.toFixed(2) + '</td></tr>';
+            }
+            
+            document.getElementById('totalAmt').textContent = '₱' + totalAmount.toFixed(2);
+            window.scrollTo(0, 0);
+        }
+
+        function backToStore() {
+            document.getElementById('receiptSection').style.display = 'none';
+            document.getElementById('storeSection').style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
